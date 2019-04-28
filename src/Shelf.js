@@ -12,7 +12,6 @@ class Shelf extends Component {
 
   render() {
     const { shelfName, books } = this.props;
-    console.log(books);
 
     return (
       <div className="bookshelf">
@@ -21,12 +20,21 @@ class Shelf extends Component {
           <ol className="books-grid">
             {books.map(book => (
               <li key={book.id}>
-                <Book
-                  title={book.title}
-                  author={book.author}
-                  thumbnail={book.imageLinks.thumbnail}
-                  shelf={book.shelf}
-                />
+                {book.imageLinks && (
+                  <Book
+                    title={book.title}
+                    author={"".concat(book.authors)}
+                    thumbnail={book.imageLinks.thumbnail}
+                    shelf={book.shelf}
+                  />
+                )}
+                {!book.imageLinks && (
+                  <Book
+                    title={book.title}
+                    author={"".concat(book.authors)}
+                    shelf={book.shelf}
+                  />
+                )}
               </li>
             ))}
           </ol>

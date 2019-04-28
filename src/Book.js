@@ -4,14 +4,19 @@ import PropTypes from "prop-types";
 class Book extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
-    author: PropTypes.string.isRequired,
-    thumbnail: PropTypes.string.isRequired,
-    shelf: PropTypes.string.isRequired
+    shelf: PropTypes.string.isRequired,
+    thumbnail: PropTypes.string.isRequired
+  };
+
+  static defaultProps = {
+    shelf: "none",
+    thumbnail: ""
   };
 
   updateShelfHandler = event => {
     console.log(event.target.value);
   };
+
   render() {
     const { title, author, thumbnail, shelf } = this.props;
 
