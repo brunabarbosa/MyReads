@@ -1,37 +1,50 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 class Book extends Component {
+  static propTypes = {
+    title: PropTypes.string.isRequired,
+    author: PropTypes.string.isRequired,
+    thumbnail: PropTypes.string.isRequired,
+    shelf: PropTypes.string.isRequired
+  };
+
+  updateShelfHandler = event => {
+    console.log(event.target.value);
+  };
   render() {
+    const { title, author, thumbnail, shelf } = this.props;
+
     return (
       <div>
-        <li>
-          <div className="book">
-            <div className="book-top">
-              <div
-                className="book-cover"
-                style={{
-                  width: 128,
-                  height: 193,
-                  backgroundImage:
-                    'url("http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api")'
-                }}
-              />
-              <div className="book-shelf-changer">
-                <select>
-                  <option value="move" disabled>
-                    Move to...
-                  </option>
-                  <option value="currentlyReading">Currently Reading</option>
-                  <option value="wantToRead">Want to Read</option>
-                  <option value="read">Read</option>
-                  <option value="none">None</option>
-                </select>
-              </div>
+        <div className="book">
+          <div className="book-top">
+            <div
+              className="book-cover"
+              style={{
+                width: 128,
+                height: 193,
+                backgroundImage: `url(${thumbnail})`
+              }}
+            />
+            <div className="book-shelf-changer">
+              <select
+                value={shelf}
+                onChange={event => this.updateShelfHandler(event)}
+              >
+                <option value="move" disabled>
+                  Move to...
+                </option>
+                <option value="currentlyReading">Currently Reading</option>
+                <option value="wantToRead">Want to Read</option>
+                <option value="read">Read</option>
+                <option value="none">None</option>
+              </select>
             </div>
-            <div className="book-title">To Kill a Mockingbird</div>
-            <div className="book-authors">Harper Lee</div>
           </div>
-        </li>
+          <div className="book-title">{title}</div>
+          <div className="book-authors">{author}</div>
+        </div>
       </div>
     );
   }
