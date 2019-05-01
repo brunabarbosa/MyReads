@@ -3,20 +3,38 @@ import "./App.css";
 import Shelf from "./Shelf";
 import { Route, Link } from "react-router-dom";
 import Search from "./Search";
-import { getAll } from "./BooksAPI";
+import { getAll, update } from "./BooksAPI";
 
 class App extends Component {
   state = {
     books: []
   };
 
-  componentDidMount() {
+  retrieveBooks() {
     getAll().then(books => {
       this.setState(() => ({
         books
       }));
     });
   }
+
+  componentDidMount() {
+    this.retrieveBooks();
+  }
+
+  updateShelf = (book, shelf) => {
+    update(book, shelf).then(() => {
+      this.setState(currentState => ({
+        books: currentState.books.map(item => {
+          if (item.id === book.id) {
+            item.shelf = shelf;
+          }
+          return item;
+        })
+      }));
+    });
+    //console.log(`Book: ${book}, Shelf: ${shelf}`);
+  };
 
   render() {
     return (
@@ -29,21 +47,27 @@ class App extends Component {
               <div className="list-books-title">
                 <h1>MyReads</h1>
               </div>
+
               <Shelf
-                shelfName="Currently Reading"
+                shelfName={"Currently Reading"}
                 books={this.state.books.filter(
                   book => book.shelf === "currentlyReading"
                 )}
+                onUpdateShelf={this.updateShelf}
               />
+
               <Shelf
-                shelfName="Want to Read"
+                shelfName={"Want to Read"}
                 books={this.state.books.filter(
                   book => book.shelf === "wantToRead"
                 )}
+                onUpdateShelf={this.updateShelf}
               />
+
               <Shelf
-                shelfName="Want to Read"
+                shelfName={"Read"}
                 books={this.state.books.filter(book => book.shelf === "read")}
+                onUpdateShelf={this.updateShelf}
               />
 
               <Link to="/search" className="open-search">
@@ -56,8 +80,8 @@ class App extends Component {
           path="/search"
           render={({ history }) => (
             <Search
-              books={this.state.books}
               onSearch={() => history.push("/")}
+              onUpdateShelf={this.updateShelf}
             />
           )}
         />

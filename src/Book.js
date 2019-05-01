@@ -1,24 +1,16 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 
 class Book extends Component {
-  static propTypes = {
-    title: PropTypes.string.isRequired,
-    shelf: PropTypes.string.isRequired,
-    thumbnail: PropTypes.string.isRequired
-  };
-
   static defaultProps = {
     shelf: "none",
-    thumbnail: ""
-  };
-
-  updateShelfHandler = event => {
-    console.log(event.target.value);
+    imageLinks: {
+      thumbnail: ""
+    }
   };
 
   render() {
-    const { title, author, thumbnail, shelf } = this.props;
+    const { title, authors, imageLinks, shelf } = this.props.book;
+    const { book, onUpdateShelf } = this.props;
 
     return (
       <div>
@@ -29,13 +21,15 @@ class Book extends Component {
               style={{
                 width: 128,
                 height: 193,
-                backgroundImage: `url(${thumbnail})`
+                backgroundImage: `url(${imageLinks.thumbnail})`
               }}
             />
             <div className="book-shelf-changer">
               <select
                 value={shelf}
-                onChange={event => this.updateShelfHandler(event)}
+                onChange={event => {
+                  onUpdateShelf(book, event.target.value);
+                }}
               >
                 <option value="move" disabled>
                   Move to...
@@ -48,7 +42,7 @@ class Book extends Component {
             </div>
           </div>
           <div className="book-title">{title}</div>
-          <div className="book-authors">{author}</div>
+          <div className="book-authors">{"".concat(authors)}</div>
         </div>
       </div>
     );

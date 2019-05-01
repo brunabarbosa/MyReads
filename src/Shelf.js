@@ -4,14 +4,19 @@ import Book from "./Book";
 
 class Shelf extends Component {
   static propTypes = {
-    shelfName: PropTypes.string.isRequired,
-    books: PropTypes.array.isRequired
+    onUpdateShelf: PropTypes.func.isRequired
+  };
+
+  static defaultProps = {
+    currentlyReading: [],
+    wantToRead: [],
+    read: []
   };
 
   state = {};
 
   render() {
-    const { shelfName, books } = this.props;
+    const { shelfName, books, onUpdateShelf } = this.props;
 
     return (
       <div className="bookshelf">
@@ -20,21 +25,7 @@ class Shelf extends Component {
           <ol className="books-grid">
             {books.map(book => (
               <li key={book.id}>
-                {book.imageLinks && (
-                  <Book
-                    title={book.title}
-                    author={"".concat(book.authors)}
-                    thumbnail={book.imageLinks.thumbnail}
-                    shelf={book.shelf}
-                  />
-                )}
-                {!book.imageLinks && (
-                  <Book
-                    title={book.title}
-                    author={"".concat(book.authors)}
-                    shelf={book.shelf}
-                  />
-                )}
+                <Book book={book} onUpdateShelf={onUpdateShelf} />
               </li>
             ))}
           </ol>

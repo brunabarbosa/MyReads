@@ -1,49 +1,42 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import PropTypes from "prop-types";
 import { search } from "./BooksAPI";
 import Book from "./Book";
 
 class Search extends Component {
-  static propTypes = {
-    books: PropTypes.array.isRequired
-  };
-
   state = {
-    searchResult: [],
-    query: ""
+    query: "",
+    searchResult: []
   };
 
   updateQuery = query => {
     this.setState(() => ({
-      query: query
+      query
     }));
-    query.trim() ? this.searchBooks(query) : this.cleanSearch();
+
+    if (query !== "") {
+      this.searchBooks(query);
+    } else {
+      this.updateBooks([]);
+    }
   };
 
-  cleanSearch = () => {
+  updateBooks = result => {
     this.setState(() => ({
-      searchResult: []
+      searchResult: result
     }));
   };
 
   searchBooks = query => {
-    search(query)
-      .then(books => {
-        if (books && books.length > 0) {
-          this.setState(() => ({
-            searchResult: books
-          }));
-        } else {
-          this.cleanSearch();
-        }
-      })
-      .catch(e => {
-        console.log(`Error: ${e}`);
-      });
+    search(query).then(books => {
+      this.updateBooks(books);
+    });
   };
 
   render() {
+    const { onUpdateShelf } = this.props;
+    const { query, searchResult } = this.state;
+
     return (
       <div>
         <div className="search-books-bar">
@@ -54,27 +47,16 @@ class Search extends Component {
             <input
               type="text"
               placeholder="Search by title or author"
-              value={this.state.query}
-              onChange={event =>
-                this.updateQuery(event.target.value.toLowerCase())
-              }
+              value={query}
+              onChange={event => this.updateQuery(event.target.value.trim())}
             />
           </div>
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {this.state.searchResult.map(book => (
+            {searchResult.map(book => (
               <li key={book.id}>
-                {book.imageLinks && (
-                  <Book
-                    title={book.title}
-                    author={book.authors}
-                    thumbnail={book.imageLinks.thumbnail}
-                  />
-                )}
-                {!book.imageLinks && (
-                  <Book title={book.title} author={book.authors} />
-                )}
+                <Book book={book} onUpdateShelf={onUpdateShelf} />
               </li>
             ))}
           </ol>
