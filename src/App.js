@@ -24,16 +24,13 @@ class App extends Component {
 
   updateShelf = (book, shelf) => {
     update(book, shelf).then(() => {
+      book.shelf = shelf;
       this.setState(currentState => ({
-        books: currentState.books.map(item => {
-          if (item.id === book.id) {
-            item.shelf = shelf;
-          }
-          return item;
-        })
+        books: currentState.books
+          .filter(item => item.id !== book.id)
+          .concat([book])
       }));
     });
-    //console.log(`Book: ${book}, Shelf: ${shelf}`);
   };
 
   render() {
@@ -81,6 +78,7 @@ class App extends Component {
           render={({ history }) => (
             <Search
               onSearch={() => history.push("/")}
+              books={this.state.books}
               onUpdateShelf={this.updateShelf}
             />
           )}

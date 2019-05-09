@@ -1,6 +1,11 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 class Book extends Component {
+  static propTypes = {
+    onUpdateShelf: PropTypes.func.isRequired
+  };
+
   static defaultProps = {
     shelf: "none",
     imageLinks: {
@@ -9,8 +14,8 @@ class Book extends Component {
   };
 
   render() {
-    const { title, authors, imageLinks, shelf } = this.props.book;
-    const { book, onUpdateShelf } = this.props;
+    const { title, authors, imageLinks } = this.props.book;
+    const { book, shelf, onUpdateShelf } = this.props;
 
     return (
       <div>

@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { search } from "./BooksAPI";
-import Book from "./Book";
+import { mergeById } from "./Utils";
+import BookList from "./BookList";
 
 class Search extends Component {
   state = {
@@ -22,9 +23,15 @@ class Search extends Component {
   };
 
   updateBooks = result => {
-    this.setState(() => ({
-      searchResult: result
-    }));
+    if (result && result.length > 0) {
+      this.setState(() => ({
+        searchResult: mergeById(result, this.props.books)
+      }));
+    } else {
+      this.setState(() => ({
+        searchResult: []
+      }));
+    }
   };
 
   searchBooks = query => {
@@ -53,13 +60,7 @@ class Search extends Component {
           </div>
         </div>
         <div className="search-books-results">
-          <ol className="books-grid">
-            {searchResult.map(book => (
-              <li key={book.id}>
-                <Book book={book} onUpdateShelf={onUpdateShelf} />
-              </li>
-            ))}
-          </ol>
+          <BookList books={searchResult} onUpdateShelf={onUpdateShelf} />
         </div>
       </div>
     );
