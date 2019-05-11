@@ -7,15 +7,12 @@ class Book extends Component {
   };
 
   static defaultProps = {
-    shelf: "none",
-    imageLinks: {
-      thumbnail: ""
-    }
+    shelf: "none"
   };
 
   render() {
-    const { title, authors, imageLinks } = this.props.book;
-    const { book, shelf, onUpdateShelf } = this.props;
+    const { title, authors } = this.props.book;
+    const { book, shelf, thumbnail, onUpdateShelf } = this.props;
 
     return (
       <div>
@@ -26,7 +23,7 @@ class Book extends Component {
               style={{
                 width: 128,
                 height: 193,
-                backgroundImage: `url(${imageLinks.thumbnail})`
+                backgroundImage: `url(${thumbnail})`
               }}
             />
             <div className="book-shelf-changer">
@@ -47,7 +44,9 @@ class Book extends Component {
             </div>
           </div>
           <div className="book-title">{title}</div>
-          <div className="book-authors">{"".concat(authors)}</div>
+          {authors && authors.length > 0 && (
+            <div className="book-authors">{"".concat(authors)}</div>
+          )}
         </div>
       </div>
     );

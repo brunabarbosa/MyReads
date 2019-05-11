@@ -6,11 +6,14 @@ const BookList = props => {
     <ol className="books-grid">
       {props.books.map(book => (
         <li key={book.id}>
-          <Book
-            book={book}
-            shelf={book.shelf}
-            onUpdateShelf={props.onUpdateShelf}
-          />
+          {book.imageLinks && (
+            <Book
+              book={book}
+              thumbnail={book.imageLinks.thumbnail}
+              shelf={book.shelf}
+              onUpdateShelf={props.onUpdateShelf}
+            />
+          )}
         </li>
       ))}
     </ol>
