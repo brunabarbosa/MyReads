@@ -5,7 +5,7 @@
   "engines": {
     "npm": "6.10.3",
     "node": "10.15.3"
-  }
+  },
   "dependencies": {
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
